@@ -43,7 +43,7 @@ describe('the login component', () => {
 
   });
 
-  describe('without a logged in user', () => {
+  describe('without a non-logged in user', () => {
     let component: LoginComponent;
     let fixture: ComponentFixture<LoginComponent>;
 
