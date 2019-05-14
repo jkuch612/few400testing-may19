@@ -23,7 +23,7 @@ describe('actually testing a component', () => {
     // get the instance of the component
     component = fixture.componentInstance;
 
-    //console.log(component.message);
+    // console.log(component.message);
     // Get a reference to the UI Elements that we need to look at or interact with
     deMessage = fixture.debugElement.query(By.css('[data-basic-message]'));
     elMessage = deMessage.nativeElement;

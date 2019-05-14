@@ -1,5 +1,7 @@
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
-import { Action, createFeatureSelector, createSelector } from '@ngrx/store';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { tassign } from 'tassign';
+import * as actions from '../actions/list.actions';
 import { ToDoListItem } from '../models';
 
 export interface ToDoEntity {
@@ -19,10 +21,21 @@ const initialState: State = {
   completedIds: ['1']
 };
 
-const adaptor = createEntityAdapter<ToDoEntity>();
+export const adaptor = createEntityAdapter<ToDoEntity>();
 
-export function reducer(state: State = initialState, action: Action): State {
+export function reducer(state: State = initialState, action: actions.All): State {
   switch (action.type) {
+    case actions.ITEM_ADDED: {
+      return adaptor.addOne(action.item, state);
+    }
+    case actions.ITEM_COMPLETED: {
+      // return Object.assign({}, state, { completedIds: [action.item.id, ...state.completedIds] });
+      return tassign(state, { completedIds: [action.item.id, ...state.completedIds] });
+    }
+    case actions.ITEM_ADDED_SUCCESS: {
+      const tempstate = adaptor.removeOne(action.oldId, state);
+      return adaptor.addOne(action.item, tempstate);
+    }
     default: {
       return state;
     }
@@ -44,7 +57,8 @@ export const selectToDoListItems = createSelector(_selectAllToDos, _selectComple
     return ({
       id: todo.id,
       description: todo.description,
-      completed: ids.some(i => i === todo.id)
+      completed: ids.some(i => i === todo.id),
+      temporary: todo.id.startsWith('T')
     }) as ToDoListItem;
   });
 });

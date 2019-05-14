@@ -1,6 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AppRoutingModule } from './app-routing.module';
@@ -11,8 +12,9 @@ import { BookListComponent } from './components/book-list/book-list.component';
 import { LoginComponent } from './components/login/login.component';
 import { LoginService } from './components/login/login.service';
 import { TodoListComponent } from './components/todo-list/todo-list.component';
+import { TodosDataService } from './components/todo-list/todos.data.service';
+import { TodosEffects } from './components/todo-list/todos.effects';
 import { reducers } from './reducers';
-
 
 @NgModule({
   declarations: [
@@ -27,9 +29,11 @@ import { reducers } from './reducers';
     AppRoutingModule,
     HttpClientModule,
     StoreModule.forRoot(reducers),
-    StoreDevtoolsModule.instrument()
+    StoreDevtoolsModule.instrument(),
+    EffectsModule.forRoot([TodosEffects])
   ],
-  providers: [LoginService, BookDataService],
+  providers: [LoginService, BookDataService, TodosDataService],
   bootstrap: [AppComponent]
 })
+
 export class AppModule { }
